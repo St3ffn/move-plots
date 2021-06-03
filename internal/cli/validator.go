@@ -2,7 +2,7 @@ package cli
 
 import (
 	"fmt"
-	"io/fs"
+	"move-plots/internal/filesystem"
 )
 
 // Validator interface to enforce certain rules
@@ -13,16 +13,16 @@ type Validator interface {
 
 // IsDirectory is a validator to enforce a directory
 type IsDirectory struct {
-	stat func (name string) (fs.FileInfo, error)
+	filesystem.Filesystem
 }
 
 // Enforce enforces that given path is a directory
 func (d IsDirectory) Enforce(path string) error {
-	fileInfo, err := d.stat(path)
+	fileInfo, err := d.Stat(path)
 	if err != nil {
 		return err
 	}
-	if ! fileInfo.IsDir() {
+	if !fileInfo.IsDir() {
 		return fmt.Errorf("%s is not a directory", path)
 	}
 	return nil

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/urfave/cli/v2"
 	"io"
+	"move-plots/internal/filesystem"
 	"os"
 	"strconv"
 )
@@ -13,9 +14,9 @@ import (
 var (
 	Args = os.Args
 	// Reserved defines the default amount of plots to reserve
-	Reserved   uint64    = 1
+	Reserved uint64 = 1
 	// Validation defines the validator to be used
-	Validation Validator = IsDirectory{stat: os.Stat}
+	Validation Validator = IsDirectory{filesystem.LocalFs{}}
 )
 
 // Context describes the environment of the tool execution

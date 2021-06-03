@@ -27,9 +27,9 @@ func TestRunCli(t *testing.T) {
 		wantErr   error
 	}{
 		{
-			name: "ok",
+			name:      "ok",
 			validator: testValidation{},
-			args: []string{"move-plots", "/source", "/target1", "/target2"},
+			args:      []string{"move-plots", "/source", "/target1", "/target2"},
 			want: Context{
 				Reserved: Reserved,
 				Source:   "/source",
@@ -37,27 +37,27 @@ func TestRunCli(t *testing.T) {
 			},
 		},
 		{
-			name: "help short",
+			name:      "help short",
 			validator: testValidation{},
-			args: []string{"move-plots", "-h"},
+			args:      []string{"move-plots", "-h"},
 			want: Context{
 				Reserved: Reserved,
 				Done:     true,
 			},
 		},
 		{
-			name: "help long",
+			name:      "help long",
 			validator: testValidation{},
-			args: []string{"move-plots", "--help"},
+			args:      []string{"move-plots", "--help"},
 			want: Context{
 				Reserved: Reserved,
 				Done:     true,
 			},
 		},
 		{
-			name: "reserve none short",
+			name:      "reserve none short",
 			validator: testValidation{},
-			args: []string{"move-plots", "-r", "0", "/source", "/target1", "/target2"},
+			args:      []string{"move-plots", "-r", "0", "/source", "/target1", "/target2"},
 			want: Context{
 				Reserved: 0,
 				Source:   "/source",
@@ -65,9 +65,9 @@ func TestRunCli(t *testing.T) {
 			},
 		},
 		{
-			name: "reserve 11231230 long",
+			name:      "reserve 11231230 long",
 			validator: testValidation{},
-			args: []string{"move-plots", "--reserve", "11231230", "/source", "/target1"},
+			args:      []string{"move-plots", "--reserve", "11231230", "/source", "/target1"},
 			want: Context{
 				Reserved: 11231230,
 				Source:   "/source",
@@ -75,49 +75,49 @@ func TestRunCli(t *testing.T) {
 			},
 		},
 		{
-			name:    "err no source and target",
+			name:      "err no source and target",
 			validator: testValidation{},
-			args:    []string{"move-plots"},
-			wantErr: errors.New("SOURCE_DIRECTORY and TARGET_DIRECTORY missing"),
+			args:      []string{"move-plots"},
+			wantErr:   errors.New("SOURCE_DIRECTORY and TARGET_DIRECTORY missing"),
 		},
 		{
-			name:    "err no target",
+			name:      "err no target",
 			validator: testValidation{},
-			args:    []string{"move-plots", "/tmp"},
-			wantErr: errors.New("TARGET_DIRECTORY missing"),
+			args:      []string{"move-plots", "/tmp"},
+			wantErr:   errors.New("TARGET_DIRECTORY missing"),
 		},
 		{
-			name:    "unknown parameter -x",
+			name:      "unknown parameter -x",
 			validator: testValidation{},
-			args:    []string{"move-plots", "-x", "asdas"},
-			wantErr: errors.New("flag provided but not defined: -x"),
+			args:      []string{"move-plots", "-x", "asdas"},
+			wantErr:   errors.New("flag provided but not defined: -x"),
 		},
 		{
-			name:    "invalid reserve paramter",
+			name:      "invalid reserve paramter",
 			validator: testValidation{},
-			args:    []string{"move-plots", "-r", "12.12", "/home/steffen"},
-			wantErr: errors.New("invalid value \"12.12\" for flag -r: parse error"),
+			args:      []string{"move-plots", "-r", "12.12", "/home/steffen"},
+			wantErr:   errors.New("invalid value \"12.12\" for flag -r: parse error"),
 		},
 		{
-			name: "show version short",
+			name:      "show version short",
 			validator: testValidation{},
-			args: []string{"move-plots", "-V"},
+			args:      []string{"move-plots", "-V"},
 			want: Context{
 				Done: true,
 			},
 		},
 		{
-			name: "show version long",
+			name:      "show version long",
 			validator: testValidation{},
-			args: []string{"move-plots", "--version"},
+			args:      []string{"move-plots", "--version"},
 			want: Context{
 				Done: true,
 			},
 		},
 		{
-			name: "verbose mode short",
+			name:      "verbose mode short",
 			validator: testValidation{},
-			args: []string{"move-plots", "-v", "/tmp", "/target1", "/target2"},
+			args:      []string{"move-plots", "-v", "/tmp", "/target1", "/target2"},
 			want: Context{
 				Source:  "/tmp",
 				Targets: []string{"/target1", "/target2"},
@@ -125,9 +125,9 @@ func TestRunCli(t *testing.T) {
 			},
 		},
 		{
-			name: "verbose mode long",
+			name:      "verbose mode long",
 			validator: testValidation{},
-			args: []string{"move-plots", "--verbose", "/tmp", "/target1", "/target2"},
+			args:      []string{"move-plots", "--verbose", "/tmp", "/target1", "/target2"},
 			want: Context{
 				Source:  "/tmp",
 				Targets: []string{"/target1", "/target2"},
@@ -135,10 +135,10 @@ func TestRunCli(t *testing.T) {
 			},
 		},
 		{
-			name: "validation fails mode long",
-			validator: testValidation{ errors.New("path broken") },
-			args: []string{"move-plots", "--verbose", "/tmp", "/target1", "/target2"},
-			wantErr: errors.New("path broken"),
+			name:      "validation fails mode long",
+			validator: testValidation{errors.New("path broken")},
+			args:      []string{"move-plots", "--verbose", "/tmp", "/target1", "/target2"},
+			wantErr:   errors.New("path broken"),
 		},
 	}
 	for _, tt := range tests {

@@ -13,7 +13,9 @@ import (
 var (
 	Args = os.Args
 	// Reserved defines the default amount of plots to reserve
-	Reserved uint64 = 1
+	Reserved   uint64    = 1
+	// Validation defines the validator to be used
+	Validation Validator = IsDirectory{stat: os.Stat}
 )
 
 // Context describes the environment of the tool execution
@@ -87,8 +89,15 @@ func RunCli(writer io.Writer, version string) (*Context, error) {
 				return errors.New("TARGET_DIRECTORY missing")
 			}
 
+			for _, path := range c.Args().Slice() {
+				if err := Validation.Enforce(path); err != nil {
+					return err
+				}
+			}
+
 			source = c.Args().First()
 			targets = c.Args().Slice()[1:]
+
 			return nil
 		},
 		Copyright: "GNU GPLv3",
@@ -102,8 +111,8 @@ func RunCli(writer io.Writer, version string) (*Context, error) {
 
 	return &Context{
 		Reserved: Reserved,
-		Source: source,
-		Targets: targets,
+		Source:   source,
+		Targets:  targets,
 		Verbose:  verbose,
 		Done:     done,
 	}, nil

@@ -5,14 +5,18 @@ import (
 	"io/fs"
 )
 
+// Validator interface to enforce certain rules
 type Validator interface {
+	// Enforce enforces the rule based on given path
 	Enforce(path string) error
 }
 
+// IsDirectory is a validator to enforce a directory
 type IsDirectory struct {
 	stat func (name string) (fs.FileInfo, error)
 }
 
+// Enforce enforces that given path is a directory
 func (d IsDirectory) Enforce(path string) error {
 	fileInfo, err := d.stat(path)
 	if err != nil {

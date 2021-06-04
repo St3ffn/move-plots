@@ -58,7 +58,7 @@ func RunCli(writer io.Writer, version string) (*Context, error) {
 	app := &cli.App{
 		Name:                 "move-plots",
 		Usage:                "move chia plots from source directory to a target directory with enough space left",
-		UsageText:            "move-plots [-v] SOURCE_DIRECTORY TARGET_DIRECTORY ...\n\t move-plots -v /source /plots/a /plots/b /plots/c",
+		UsageText:            "move-plots [-r RESERVE] [-v]  SOURCE_DIRECTORY TARGET_DIRECTORY ...\n\t move-plots -r 0 -v /source /plots/a /plots/b /plots/c",
 		Description:          "Tool will move each plot from source directory to a target directory with enough space left",
 		EnableBashCompletion: true,
 		HideHelpCommand:      true,

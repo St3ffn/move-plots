@@ -108,3 +108,15 @@ func (d DummyStatfs) Statfs(path string, stat *syscall.Statfs_t) (err error) {
 	}
 	return d.Err
 }
+
+type DummyMover struct {
+	// TargetFileError represents a map with the targets (path + filename) and error to return for move operation
+	TargetFileError map[string]error
+}
+
+func (d DummyMover) Move(_, target string) error {
+	if err, exists := d.TargetFileError[target]; exists {
+		return err
+	}
+	return nil
+}

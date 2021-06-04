@@ -8,8 +8,10 @@ import (
 
 // InfoPrefix for info log level prefix
 const InfoPrefix = "INFO: "
+
 // ErrorPrefix for error log level prefix
 const ErrorPrefix = "ERROR: "
+
 // VerbosePrefix for verbose log level prefix
 const VerbosePrefix = "INFO: " // same as info on purpose
 
@@ -25,8 +27,8 @@ type LogFacade interface {
 
 // Loggers stores the loggers of the different log levels
 type Loggers struct {
-	info Logger
-	error Logger
+	info    Logger
+	error   Logger
 	verbose Logger
 }
 

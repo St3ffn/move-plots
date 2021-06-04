@@ -18,8 +18,7 @@ var (
 
 func main() {
 	if err := run(); err != nil {
-		log.E().Println(err.Error())
-		os.Exit(1)
+		log.E().Fatalln(err.Error())
 	}
 }
 

@@ -2,6 +2,7 @@ package plot
 
 import (
 	"errors"
+	"github.com/St3ffn/plots-left/pkg/disk"
 	"move-plots/internal/test"
 	"reflect"
 	"testing"
@@ -96,6 +97,67 @@ func TestFindPlots(t *testing.T) {
 			}
 			if !reflect.DeepEqual(gotPlots, tt.wantPlots) {
 				t.Errorf("FindPlots() gotPlots = %v, want %v", gotPlots, tt.wantPlots)
+			}
+		})
+	}
+}
+
+func TestFindDisk(t *testing.T) {
+	tests := []struct {
+		name        string
+		reserved    uint64
+		paths       []string
+		dummyStatfs test.DummyStatfs
+		want        string
+		wantErr     error
+	}{
+		{
+			name:        "first disk",
+			reserved:    1,
+			paths:       []string{"/one", "/two", "/three"},
+			dummyStatfs: test.DummyStatfs{PathPlotsLeft: map[string]uint64{"/one": 3, "/two": 2, "/three": 1}},
+			want:        "/one",
+		},
+		{
+			name:        "second disk",
+			reserved:    1,
+			paths:       []string{"/one", "/two", "/three"},
+			dummyStatfs: test.DummyStatfs{PathPlotsLeft: map[string]uint64{"/one": 1, "/two": 2, "/three": 1}},
+			want:        "/two",
+		},
+		{
+			name:        "none",
+			reserved:    1,
+			paths:       []string{"/one", "/two", "/three"},
+			dummyStatfs: test.DummyStatfs{PathPlotsLeft: map[string]uint64{"/one": 1, "/two": 0, "/three": 1}},
+		},
+		{
+			name:        "none",
+			reserved:    1,
+			paths:       []string{"/one", "/two", "/three"},
+			dummyStatfs: test.DummyStatfs{PathPlotsLeft: map[string]uint64{"/one": 1}, Err: errors.New("some error")},
+			wantErr:     errors.New("some error"),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			disk.Statfs = tt.dummyStatfs.Statfs
+			gotInfo, err := FindDisk(tt.reserved, tt.paths)
+
+			if err != nil {
+				if tt.wantErr == nil || !reflect.DeepEqual(err, tt.wantErr) {
+					t.Errorf("FindDisk() error = %v, wantErr %v", err, tt.wantErr)
+				}
+				return
+			}
+
+			if gotInfo == nil && tt.want != "" {
+				t.Errorf("FindDisk() gotInfo = %v, want %v", gotInfo, tt.want)
+				return
+			}
+
+			if gotInfo != nil && gotInfo.Path != tt.want {
+				t.Errorf("FindDisk() gotInfo = %v, want %v", gotInfo.Path, tt.want)
 			}
 		})
 	}

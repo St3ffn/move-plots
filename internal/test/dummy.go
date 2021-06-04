@@ -2,9 +2,11 @@
 package test
 
 import (
+	"github.com/St3ffn/plots-left/pkg/disk"
 	"io/fs"
 	"move-plots/internal/filesystem"
 	"os"
+	"syscall"
 	"time"
 )
 
@@ -89,4 +91,20 @@ func (t DummyFileInfo) IsDir() bool {
 
 func (t DummyFileInfo) Sys() interface{} {
 	panic("implement me")
+}
+
+type DummyStatfs struct {
+	// pathPlotsLeft map with path as key and amount of available plots as value
+	PathPlotsLeft map[string]uint64
+	// err error to return when given path doesn't exist
+	Err error
+}
+
+func (d DummyStatfs) Statfs(path string, stat *syscall.Statfs_t) (err error) {
+	if available, exists := d.PathPlotsLeft[path]; exists {
+		stat.Bsize = 1
+		stat.Blocks = (available + 1) * disk.SizeOfPlot.Byte()
+		stat.Bfree = available * disk.SizeOfPlot.Byte()
+	}
+	return d.Err
 }

@@ -44,6 +44,5 @@ type LocalMove struct{}
 
 // Move performs the mv os operation
 func (LocalMove) Move(source, target string) error {
-	cmd := exec.Command("mv", source, target)
-	return cmd.Run()
+	return exec.Command("mv", source, target).Run()
 }

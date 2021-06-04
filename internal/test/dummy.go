@@ -10,6 +10,7 @@ import (
 	"time"
 )
 
+// DummyFilesystem is a testing filesystem
 type DummyFilesystem struct {
 	Files      []string
 	OpenErr    error
@@ -19,6 +20,7 @@ type DummyFilesystem struct {
 	Directory  bool
 }
 
+// Open returns a DummyFolder or error if defined
 func (t DummyFilesystem) Open(_ string) (filesystem.File, error) {
 	if t.OpenErr != nil {
 		return nil, t.OpenErr
@@ -31,6 +33,7 @@ func (t DummyFilesystem) Open(_ string) (filesystem.File, error) {
 	}, nil
 }
 
+// Stat returns DummyFileInfo or error if defined
 func (t DummyFilesystem) Stat(name string) (fs.FileInfo, error) {
 	if t.StatErr != nil {
 		return nil, t.StatErr
@@ -41,16 +44,19 @@ func (t DummyFilesystem) Stat(name string) (fs.FileInfo, error) {
 	}, nil
 }
 
+// DummyFolder which consists of files. Struct can also contain error for closing the directory or reading the directory.
 type DummyFolder struct {
 	files      []string
 	closeErr   error
 	readDirErr error
 }
 
+// Close return the closing error
 func (t DummyFolder) Close() error {
 	return t.closeErr
 }
 
+// Readdir returns the list of files in the directory or error if defined
 func (t DummyFolder) Readdir(n int) (infos []os.FileInfo, err error) {
 	if t.readDirErr != nil {
 		return nil, t.readDirErr
@@ -64,35 +70,43 @@ func (t DummyFolder) Readdir(n int) (infos []os.FileInfo, err error) {
 	return infos, nil
 }
 
+// DummyFileInfo is a testing file info
 type DummyFileInfo struct {
 	name      string
 	Directory bool
 }
 
+// Name the name of the file
 func (t DummyFileInfo) Name() string {
 	return t.name
 }
 
+// Size is not implemented
 func (t DummyFileInfo) Size() int64 {
 	panic("implement me")
 }
 
+// Mode is not implemented
 func (t DummyFileInfo) Mode() fs.FileMode {
 	panic("implement me")
 }
 
+// ModTime is not implemented
 func (t DummyFileInfo) ModTime() time.Time {
 	panic("implement me")
 }
 
+// IsDir is not implemented
 func (t DummyFileInfo) IsDir() bool {
 	return t.Directory
 }
 
+// Sys is not implemented
 func (t DummyFileInfo) Sys() interface{} {
 	panic("implement me")
 }
 
+// DummyStatfs testing statfs operation representing certain amount of plots in paths
 type DummyStatfs struct {
 	// pathPlotsLeft map with path as key and amount of available plots as value
 	PathPlotsLeft map[string]uint64
@@ -100,6 +114,7 @@ type DummyStatfs struct {
 	Err error
 }
 
+// Statfs returns the block size information for the defined amount of plots or error if defined
 func (d DummyStatfs) Statfs(path string, stat *syscall.Statfs_t) (err error) {
 	if available, exists := d.PathPlotsLeft[path]; exists {
 		stat.Bsize = 1
@@ -109,14 +124,13 @@ func (d DummyStatfs) Statfs(path string, stat *syscall.Statfs_t) (err error) {
 	return d.Err
 }
 
+// DummyMover is a testing mover
 type DummyMover struct {
 	// TargetFileError represents a map with the targets (path + filename) and error to return for move operation
 	TargetFileError map[string]error
 }
 
+// Move return error for given target if defined
 func (d DummyMover) Move(_, target string) error {
-	if err, exists := d.TargetFileError[target]; exists {
-		return err
-	}
-	return nil
+	return d.TargetFileError[target]
 }

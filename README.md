@@ -98,8 +98,8 @@ NAME:
    move-plots - move chia plots from source directory to a target directory with enough space left
 
 USAGE:
-   move-plots [-v] SOURCE_DIRECTORY TARGET_DIRECTORY ...
-   move-plots -v /source /plots/a /plots/b /plots/c
+   move-plots [-r RESERVE] [-v]  SOURCE_DIRECTORY TARGET_DIRECTORY ...
+   move-plots -r 0 -v /source /plots/a /plots/b /plots/c
 
 VERSION:
    0.1.0
@@ -133,7 +133,7 @@ The script can easily be integrated with cron. Simply open the users crontab via
 - plots are moved one after another (sequentially)
 - before a single plot gets moved each target disk is evaluated for plot capacity
 - the actual move operation is performed by the `mv` command (don't wanted to reinvent the wheel)
-- in case there is no disc space left for further plots, the script will error `...no disk space left`
+- in case there is no disk space left for further plots, the script will error `...no disk space left`
 - windows is not supported and there is also no plan to support it
 
 ## Kind gestures

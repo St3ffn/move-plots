@@ -99,7 +99,7 @@ NAME:
 
 USAGE:
    move-plots [-r RESERVE] [-v]  SOURCE_DIRECTORY TARGET_DIRECTORY ...
-   move-plots -r 0 -v /source /plots/a /plots/b /plots/c
+   move-plots -r 1 -v /source /plots/a /plots/b /plots/c
 
 VERSION:
    0.1.0
@@ -108,7 +108,7 @@ DESCRIPTION:
    Tool will move each plot from source directory to a target directory with enough space left
 
 GLOBAL OPTIONS:
-   --reserve RESERVE, -r RESERVE  RESERVE. the amount of plots to reserve. (default: 1)
+   --reserve RESERVE, -r RESERVE  RESERVE. the amount of plots to reserve. (default: 0)
    --verbose, -v                  enable verbose mode. (default: false)
    --help, -h                     show help (default: false)
    --version, -V                  print version (default: false)

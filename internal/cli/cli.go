@@ -14,7 +14,7 @@ import (
 var (
 	Args = os.Args
 	// Reserved defines the default amount of plots to reserve
-	Reserved uint64 = 1
+	Reserved uint64 = 0
 	// Validation defines the validator to be used
 	Validation Validator = IsDirectory{filesystem.LocalFs{}}
 )
